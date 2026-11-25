@@ -1,12 +1,431 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wedding RSVP</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- EDIT: Page Title -->
+  <title>Wedding RSVP — Groom & Bride</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    /* EDIT: Change colors here to match your printed wedding card */
+    :root {
+      --bg: #FAF7F2;          /* Page background (warm cream) */
+      --card: #FFFFFF;        /* Card background */
+      --primary: #7B2D26;     /* Accent color (deep maroon) */
+      --primary-dark: #5E211C;
+      --gold: #C5A059;        /* Secondary decorative accent */
+      --text: #2C2C2C;        /* Main text */
+      --muted: #6B6560;       /* Secondary text */
+      --border: #E6DFD5;      /* Soft border */
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 20px 14px 48px;
+    }
+
+    .container {
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px 22px;
+      box-shadow: 0 8px 24px rgba(44, 44, 44, 0.05);
+      margin-bottom: 18px;
+    }
+
+    /* Header */
+    .hero {
+      text-align: center;
+      border-top: 5px solid var(--primary);
+    }
+
+    .subtitle {
+      font-size: 0.78rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      color: var(--primary);
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+
+    .amp {
+      font-style: italic;
+      font-weight: 400;
+      color: var(--gold);
+    }
+
+    .date-line {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-top: 8px;
+    }
+
+    .divider {
+      width: 60px;
+      height: 2px;
+      background: var(--gold);
+      margin: 18px auto;
+      opacity: 0.6;
+    }
+
+    /* Event Details */
+    .details-grid {
+      display: grid;
+      gap: 14px;
+      text-align: center;
+    }
+
+    .detail-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .detail-value {
+      font-size: 1rem;
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    .map-btn {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 10px 18px;
+      border: 1.5px solid var(--primary);
+      color: var(--primary);
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .map-btn:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    /* RSVP Form */
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: var(--primary);
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .form-note {
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 22px;
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 14px;
+      font-size: 16px; /* Prevents iOS auto-zoom */
+      font-family: inherit;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #FCFBF9;
+      color: var(--text);
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #fff;
+    }
+
+    /* Radio option cards */
+    .radio-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .radio-card {
+      position: relative;
+    }
+
+    .radio-card input {
+      position: absolute;
+      opacity: 0;
+    }
+
+    .radio-card span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 48px;
+      padding: 10px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.92rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .radio-card input:checked + span {
+      border-color: var(--primary);
+      background: #FDF5F4;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .hidden { display: none; }
+
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: inherit;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      min-height: 50px;
+      transition: background 0.2s;
+    }
+
+    .submit-btn:hover { background: var(--primary-dark); }
+    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .thank-you {
+      text-align: center;
+      padding: 20px 10px;
+    }
+
+    .thank-you h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+  </style>
 </head>
-<body style="font-family: sans-serif; text-align: center; padding: 50px;">
-  <h2>Wedding RSVP</h2>
-  <p>Details and RSVP form will be live here soon!</p>
+<body>
+  <div class="container">
+
+    <!-- HERO SECTION -->
+    <div class="card hero">
+      <div class="subtitle">Together With Their Families</div>
+      <!-- EDIT: Couple's Names -->
+      <h1>Groom Name <span class="amp">&amp;</span> Bride Name</h1>
+      <div class="divider"></div>
+      <!-- EDIT: Wedding Date & Time -->
+      <p class="date-line">Saturday, December 12, 2026 • 11:00 AM</p>
+      <p style="color: var(--muted); font-size: 0.92rem; margin-top: 4px;">
+        We would be honored to celebrate with you.
+      </p>
+    </div>
+
+    <!-- EVENT & VENUE SECTION -->
+    <div class="card">
+      <div class="details-grid">
+        <div>
+          <div class="detail-label">Ceremony &amp; Feast</div>
+          <!-- EDIT: Venue Name & Address -->
+          <div class="detail-value">Venue Name, City</div>
+          <div style="font-size: 0.88rem; color: var(--muted);">Street / Landmark, District</div>
+        </div>
+        <div>
+          <!-- EDIT: Replace href with your actual Google Maps link -->
+          <a class="map-btn" href="https://maps.google.com/?q=Kohima" target="_blank" rel="noopener">
+            📍 Open in Google Maps
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- RSVP FORM SECTION -->
+    <div class="card">
+      <div id="form-wrapper">
+        <h2>Kindly Reply</h2>
+        <!-- EDIT: RSVP Deadline -->
+        <p class="form-note">Please respond by December 5, 2026</p>
+
+        <form id="rsvp-form">
+          <div class="field">
+            <label for="name">Your Full Name *</label>
+            <input type="text" id="name" name="name" placeholder="e.g., John Doe" required />
+          </div>
+
+          <div class="field">
+            <label>Will you be attending? *</label>
+            <div class="radio-group">
+              <label class="radio-card">
+                <input type="radio" name="attending" value="Yes" required />
+                <span>Yes, I'll be there</span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="attending" value="No" required />
+                <span>Sorry, can't make it</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Shown only when guest selects "Yes" -->
+          <div id="attending-details" class="hidden">
+            <div class="field">
+              <label for="guests">Number of Guests (including you)</label>
+              <select id="guests" name="guests">
+                <option value="1">1 Guest</option>
+                <option value="2">2 Guests</option>
+                <option value="3">3 Guests</option>
+                <option value="4">4 Guests</option>
+                <option value="5+">5 or more</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>Will you be joining us for the meal/feast?</label>
+              <div class="radio-group">
+                <label class="radio-card">
+                  <input type="radio" name="food" value="Yes" checked />
+                  <span>Yes, for food</span>
+                </label>
+                <label class="radio-card">
+                  <input type="radio" name="food" value="No" />
+                  <span>Ceremony only</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="phone">Phone Number (Optional)</label>
+            <input type="tel" id="phone" name="phone" placeholder="For any venue updates" />
+          </div>
+
+          <div class="field">
+            <label for="message">Wishes or Notes (Optional)</label>
+            <textarea id="message" name="message" rows="3" placeholder="Dietary notes or a message for the couple..."></textarea>
+          </div>
+
+          <button type="submit" class="submit-btn" id="submit-btn">Send RSVP</button>
+        </form>
+      </div>
+
+      <!-- Confirmation Message -->
+      <div id="thank-you" class="thank-you hidden">
+        <h3>Thank You!</h3>
+        <p id="thank-you-text" style="color: var(--muted);"></p>
+      </div>
+    </div>
+
+    <!-- FOOTER / BACKUP CONTACT -->
+    <footer>
+      <!-- EDIT: Replace with your or family's phone number -->
+      Having trouble with the form? Call or WhatsApp <a href="tel:+919876543210">+91 98765 43210</a>
+    </footer>
+  </div>
+
+  <script>
+    // EDIT: Paste your Web3Forms key or Google Apps Script URL later to save responses
+    const FORM_ENDPOINT = ""; 
+
+    const form = document.getElementById("rsvp-form");
+    const attendingRadios = document.querySelectorAll('input[name="attending"]');
+    const attendingDetails = document.getElementById("attending-details");
+    const submitBtn = document.getElementById("submit-btn");
+    const formWrapper = document.getElementById("form-wrapper");
+    const thankYou = document.getElementById("thank-you");
+    const thankYouText = document.getElementById("thank-you-text");
+
+    // Show or hide guest count & food questions based on attendance
+    attendingRadios.forEach((radio) => {
+      radio.addEventListener("change", (e) => {
+        if (e.target.value === "Yes") {
+          attendingDetails.classList.remove("hidden");
+        } else {
+          attendingDetails.classList.add("hidden");
+        }
+      });
+    });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Sending...";
+
+      const formData = new FormData(form);
+      const guestName = formData.get("name");
+      const isAttending = formData.get("attending") === "Yes";
+
+      // If you connected a backend endpoint (Google Sheets / Formspree), submit it
+      if (FORM_ENDPOINT) {
+        try {
+          await fetch(FORM_ENDPOINT, { method: "POST", body: formData, mode: "no-cors" });
+        } catch (err) {
+          alert("Something went wrong. Please try again or call the number below.");
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Send RSVP";
+          return;
+        }
+      }
+
+      formWrapper.classList.add("hidden");
+      thankYou.classList.remove("hidden");
+      thankYouText.textContent = isAttending
+        ? `We've recorded your RSVP, ${guestName}. We can't wait to celebrate with you!`
+        : `Thank you for letting us know, ${guestName}. You'll be missed!`;
+    });
+  </script>
 </body>
 </html>
